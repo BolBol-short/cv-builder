@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* Print / PDF export (print-CSS approach, A4).
+   Hide everything except the CV preview, then print to PDF from the browser. */
+@media print {
+  @page { size: A4; margin: 12mm; }
+  .no-print { display: none !important; }
+  body { background: #fff; }
+  .print-area { position: static; }
+  #cv-preview { max-width: none; padding: 0; }
+}
