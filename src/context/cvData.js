@@ -7,6 +7,8 @@ export const emptyCV ={
         tel: "",
         email: "",
         location: "",
+        nationality: "",
+        maritalStatus: "",
         hobbies: [],
         links: [],
         languages: [
