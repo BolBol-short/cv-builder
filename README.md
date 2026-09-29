@@ -38,8 +38,8 @@ npm run lint
 To get a PDF: click **Download PDF**, choose "Save as PDF", paper size A4, and turn off "Headers and footers".
 
 ## Project layout
-- `src/components/` — editor UI (header, content editor, design panel, preview)
-- `src/templates/` — CV templates; add a new one to `templates/index.js` and `templates/templateIds.js`
-- `src/i18n/translations.js` — all UI and CV text in English and Khmer
-- `src/constants/` — suggestion lists, color presets, example CVs
-- `src/utils/` — CV data helpers, date formatting, file import/export
+- `v1/src/components/` — editor UI (header, content editor, design panel, preview)
+- `v1/src/templates/` — CV templates; add a new one to `templates/index.js` and `templates/templateIds.js` (inside `v1/src/`)
+- `v1/src/i18n/translations.js` — all UI and CV text in English and Khmer
+- `v1/src/constants/` — suggestion lists, color presets, example CVs
+- `v1/src/utils/` — CV data helpers, date formatting, file import/export
