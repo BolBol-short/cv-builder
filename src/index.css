@@ -1,12 +1,50 @@
 @import "tailwindcss";
 
+/* Inter for Latin, Kantumruy Pro for Khmer (browser picks per glyph).
+   Moul is the formal Khmer display face used by the Traditional template title. */
+@theme {
+  --font-sans: "Inter", "Kantumruy Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-moul: "Moul", "Kantumruy Pro", serif;
+}
+
+/* Khmer script has tall stacked vowels/subscripts — give it more line height. */
+:lang(km) { line-height: 1.7; }
+
 /* Print / PDF export (print-CSS approach, A4).
-   Hide everything except the CV preview, then print to PDF from the browser. */
+   Hide everything except the CV page, drop the on-screen scaling, and keep
+   background colors (sidebars, header bands) in the PDF.
+   Page 1 is full-bleed at the top (header bands, sidebars); later pages get a
+   top margin so continued text doesn't touch the paper edge. Keep these numbers
+   in sync with FIRST_PAGE_H / NEXT_PAGE_H in components/Preview.jsx. */
+@page { size: A4; margin: 12mm 0 10mm; }
+@page :first { margin: 0 0 10mm; }
+
 @media print {
-  @page { size: A4; margin: 12mm; }
+  html, body, .app-shell { background: #fff !important; }
   .no-print { display: none !important; }
-  body { background: #fff; }
-  /* Even if the preview is toggled off on screen, printing must still work. */
-  .print-area { position: static !important; display: block !important; }
-  #cv-preview { max-width: none; padding: 0; }
+  .app-main { display: block !important; padding: 0 !important; max-width: none !important; }
+  .print-area {
+    position: static !important;
+    display: block !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    background: none !important;
+  }
+  .paper-frame {
+    height: auto !important;
+    width: auto !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+  }
+  .paper-scale { position: static !important; transform: none !important; }
+  .cv-page {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    min-height: 287mm;
+  }
+  /* Never leave a section heading alone at the bottom of a page. */
+  .cv-page h2 { break-after: avoid; }
 }

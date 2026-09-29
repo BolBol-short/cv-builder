@@ -2,13 +2,15 @@ export const emptyCV ={
     personal:{
         photo: "",
         name: "",
-        gender: "",
-        dob: "",
+        headline: "",
+        gender: "",          // option code: female | male | other
+        dob: "",             // YYYY-MM-DD
+        pob: "",
         tel: "",
         email: "",
         location: "",
         nationality: "",
-        maritalStatus: "",
+        maritalStatus: "",   // option code: single | married | divorced | widowed
         hobbies: [],
         links: [],
         languages: [
@@ -16,7 +18,7 @@ export const emptyCV ={
             {
                 id,
                 language,
-                level,
+                level,       // option code (native | fluent | …) or free text
             }
             */
         ],
@@ -28,10 +30,11 @@ export const emptyCV ={
             id,
             jobTitle,
             company,
-            description,
+            description, // one bullet per line
             location,
-            startDate,
-            endDate
+            startDate,   // YYYY-MM
+            endDate,
+            current,     // bool — shows "Present" instead of endDate
         }
         */
     ],
@@ -41,10 +44,22 @@ export const emptyCV ={
         {
             id,
             institution,
+            degree,
             gpa,
             location,
             startDate,
             endDate,
+            current,
+        }
+        */
+    ],
+    certifications: [
+        /*
+        {
+            id,
+            name,
+            issuer,
+            date,
         }
         */
     ],
@@ -53,8 +68,9 @@ export const emptyCV ={
         {
             id,
             personName,
+            position,
             companyName,
-            link,
+            link,       // phone / email
         }
         */
     ],

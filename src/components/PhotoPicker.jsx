@@ -1,10 +1,13 @@
 import { useRef } from "react";
+import { Icon } from "./Icon";
+import { useI18n } from "../i18n/I18nContext";
 
 // Photo picker: upload (or camera capture on phones via accept="image/*").
 // The image is resized on a <canvas> before it ever touches state — a phone
 // camera produces multi-MB JPEGs, and base64 of that would blow the
-// localStorage quota fast. Max edge 400px @ JPEG q0.85 ≈ tens of KB.
-const MAX_EDGE = 400;
+// localStorage quota fast. Max edge 600px @ JPEG q0.85 ≈ tens of KB,
+// still sharp at print size.
+const MAX_EDGE = 600;
 
 function resizeToDataUrl(file) {
   return new Promise((resolve, reject) => {
@@ -21,13 +24,14 @@ function resizeToDataUrl(file) {
     };
     img.onerror = () => {
       URL.revokeObjectURL(url);
-      reject(new Error("Could not read that image."));
+      reject(new Error("error.image"));
     };
     img.src = url;
   });
 }
 
 export function PhotoPicker({ value, onChange }) {
+  const { t } = useI18n();
   const inputRef = useRef(null);
 
   const handleFile = async (e) => {
@@ -36,48 +40,49 @@ export function PhotoPicker({ value, onChange }) {
     try {
       onChange(await resizeToDataUrl(file));
     } catch (err) {
-      alert(err.message);
+      alert(t(err.message));
     }
     e.target.value = ""; // allow re-selecting the same file
   };
 
   return (
-    <div className="flex items-center gap-3">
-      {value ? (
-        <img
-          src={value}
-          alt="CV portrait"
-          className="h-24 w-20 rounded-lg border border-slate-200 object-cover"
-        />
-      ) : (
-        <div className="flex h-24 w-20 items-center justify-center rounded-lg border border-dashed border-slate-300 text-xs text-slate-400">
-          Photo
-        </div>
-      )}
-      <div className="space-y-1.5">
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleFile}
-          className="hidden"
-        />
+    <div className="flex items-center gap-4">
+      <button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        className="group relative h-28 w-22 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-50"
+        aria-label={value ? t("action.changePhoto") : t("action.choosePhoto")}
+      >
+        {value ? (
+          <img src={value} alt="" className="h-full w-full object-cover" />
+        ) : (
+          <span className="flex h-full w-full flex-col items-center justify-center gap-1 text-xs text-slate-400 group-hover:text-blue-600">
+            <Icon name="user" className="h-7 w-7" strokeWidth={1.5} />
+            {t("field.photo")}
+          </span>
+        )}
+      </button>
+      <div className="space-y-2">
+        <input ref={inputRef} type="file" accept="image/*" onChange={handleFile} className="hidden" />
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="block rounded-lg border border-blue-600 px-3 py-1 text-sm font-medium text-blue-600 hover:bg-blue-50"
+          className="flex items-center gap-1.5 rounded-lg border border-blue-600 px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50"
         >
-          {value ? "Change photo" : "Choose photo"}
+          <Icon name="upload" />
+          {value ? t("action.changePhoto") : t("action.choosePhoto")}
         </button>
         {value && (
           <button
             type="button"
             onClick={() => onChange("")}
-            className="block text-sm text-red-500 hover:text-red-700"
+            className="flex items-center gap-1.5 text-sm text-red-500 hover:text-red-700"
           >
-            Remove
+            <Icon name="trash" />
+            {t("action.remove")}
           </button>
         )}
+        <p className="text-xs text-slate-400">{t("field.photoHint")}</p>
       </div>
     </div>
   );
